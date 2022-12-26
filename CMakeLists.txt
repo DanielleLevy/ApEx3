@@ -8,4 +8,4 @@ add_executable(ApEx3  "Header.h"
         "Distance.h"
         "Sample.cpp"
         "Sample.h"
-        "InputAndValidation.cpp" Knn.cpp)
+        "InputAndValidation.cpp" Knn.cpp Server.cpp Server.h)
