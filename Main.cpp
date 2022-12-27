@@ -12,7 +12,6 @@ int main(int argc, char *argv[]) {
     int k = atoi(argv[1]);
     string path = argv[2];
     string distance = argv[3];
-
     argumentsCheck(k,path,distance);
 
 //Sends the file name of a function that reads from it and returns a vector of samples:

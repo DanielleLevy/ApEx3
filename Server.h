@@ -19,23 +19,23 @@
 using namespace std;
 
 class Server {
+protected:
     int server_port ;
-    int sock ;
+    int sockFD ;
     int k;
     string distanceM;
     vector<double> vectorToClass;
-    int CheckServer();
-    int BindServer();
-    int ListenServer();
     string CalcServer(vector<double> vectorfromuser, string distance, int k);
-    bool CheckFromClient(string message);
+    int CheckFromClient(string message);
 
 
 
 public:
     vector<Sample> db;
     string answer;
-    Server(int clinet, string file);
+    Server(int port, string file);
+    int initServer();
+    int handleClientServer();
 };
 
 
