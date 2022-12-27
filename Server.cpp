@@ -22,14 +22,16 @@ int Server:: initServer(){
     sin.sin_port = htons(server_port);
     if (bind(sockFD, (struct sockaddr *) &sin, sizeof(sin)) < 0) {
         cout << "error binding socket" << endl;
-        return -2;
+        return -1;
     }
+    return 0;
 
 }
 
 
 
 int Server::handleClientServer() {
+    int sent_bytes;
     if (listen(sockFD, 0) < 0) {
         cout << "error listening to a socket" << endl;
         return -1;
@@ -39,7 +41,7 @@ int Server::handleClientServer() {
     int client_sock = accept(sockFD, (struct sockaddr *) &client_sin, &addr_len);
     if (client_sock < 0) {
         cout << "error accepting client" << endl;
-        return -2;
+        return -1;
     }
     char buffer[4096];
     int expected_data_len = sizeof(buffer);
@@ -48,24 +50,23 @@ int Server::handleClientServer() {
         int read_bytes = recv(client_sock, buffer, expected_data_len, 0);
         if (read_bytes == 0) {
             cout << "connection is closed" << endl;
-            return -3;
+            break;
         } else if (read_bytes < 0) {
             cout << "error receive" << endl;
-            return -4;
+            return -1;
         } else {
             int answerCheck = CheckFromClient(buffer);
             if (answerCheck == 0) {
                 answer = CalcServer(vectorToClass, distanceM, k);
-                int sent_bytes = send(client_sock, answer.c_str(), answer.length(), 0);
-                if (sent_bytes < 0) {
-                    cout << "error sending to client" << endl;
-                    return -6;
-                }
             } else if (answerCheck == -1) {
-                cout << "invalid input" << endl;
-                return -5;
+                answer = "invalid input";
             } else if (answerCheck == 1) {
                 break;
+            }
+            sent_bytes = send(client_sock, answer.c_str(), answer.length(), 0);
+            if (sent_bytes < 0) {
+                cout << "error sending to client" << endl;
+                return -1;
             }
         }
     }
@@ -121,9 +122,15 @@ int main(int argc, char *argv[]){
     }
     Server myServer=Server(port,argv[2]);
     int initAns=myServer.initServer();
-    while (true){
-        int talkWClient=myServer.handleClientServer();
+    if (initAns==0){
+        while (true){
+            int talkWClient=myServer.handleClientServer();
+            if(talkWClient<0){
+                continue;
+            }
+        }
     }
+
 }
 
 
