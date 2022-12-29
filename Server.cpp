@@ -78,6 +78,7 @@ int Server::handleClientServer() {
 
 int Server::CheckFromClient(string message) {
 
+    int index;
     if(message.size()==0){//check if the str empty
         cout<<"the message is empty"<<endl;
         return -1;
@@ -85,30 +86,22 @@ int Server::CheckFromClient(string message) {
     else if(message=="-1"){
         return 1;
     } else{
-        string messages[3];
-        string messageFromUser="";
-        int index=0;
         for (int i=0;i<message.size();i++) {// Go through each character in the string
             if (isalpha(message[i])){
-                messages[0] = messageFromUser;
-                messageFromUser.empty();
-                messageFromUser = messageFromUser +message[i] + message [i+1] + message[i+2];
-                messages[1] = messageFromUser;
-                messageFromUser.empty();
-                messageFromUser = messageFromUser + message [i+4];
-                messages [2] = messageFromUser;
+                index=i;
                 break;
-            } else {
-                messageFromUser = messageFromUser + message[i];
-
             }
         }
-        vectorToClass= CreateVector(messages[0],' ');
-        if(CheckInput(vectorToClass,db[0].vectorSize==-1)){
+        string vectorTemp=message.substr(0,index);
+        distanceM= message.substr(index,3);
+        string kTemp=message.substr(index+4,message.size()-vectorTemp.size()-distanceM.size());
+        vectorToClass = CreateVector(vectorTemp, ' ');
+        try {
+            k = stoi(kTemp);
+        }
+        catch (...){
             return -1;
         }
-        distanceM=messages[1];
-        k= stod(messages[2]);
         if(k>db.size()){
             return -1;
         }

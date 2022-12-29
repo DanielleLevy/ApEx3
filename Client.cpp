@@ -57,7 +57,6 @@ bool Client::checkingPort(){
 
 int Client::initClient(){
     while (true) {
-
         string inputFromUser;
         getline (cin, inputFromUser);
         if (sockFD < 0){
@@ -84,6 +83,7 @@ int Client::initClient(){
                 return -1;
             }
         } else if (answerCheck == 1) {
+            close (sockFD);
             break;
         }
 
@@ -101,14 +101,12 @@ int Client::initClient(){
         else{
             cout << buffer << endl;
         }
-
-        close (sockFD);
     }
     return 0;
 }
 
 int Client::CheckFromUser(string message){
-    string distance,k;
+    int index;
     if(message.size()==0){//check if the str empty
         cout<<"the message is empty"<<endl;
         return -1;
@@ -116,26 +114,24 @@ int Client::CheckFromUser(string message){
     else if(message=="-1"){
         return 1;
     } else{
-        string messages[3];
-        string messageFromUser="";
         for (int i=0;i<message.size();i++) {// Go through each character in the string
             if (isalpha(message[i])){
-              messages[0] = messageFromUser;
-              distance = message[i] + message [i+1] + message[i+2];
-              messages[1] = distance;
-              k = message[i+4];
-              messages [2] = k;
-              break;
-            }
-            else {
-                messageFromUser = messageFromUser + message[i];
+                index=i;
+                break;
             }
         }
-        vector<double> a = CreateVector(messages[0], ' ');
-        string distance = messages[1];
-        int k = stoi(messages[2]);
-        argumentsCheckClient(distance, k);
-        return 0;
+        string vectorTemp=message.substr(0,index);
+        string distanceT= message.substr(index,3);
+        string kTemp=message.substr(index+4,message.size()-vectorTemp.size()-distanceT.size());
+        vector<double> a = CreateVector(vectorTemp, ' ');
+        try {
+            int k = stoi(kTemp);
+            argumentsCheckClient(distanceT,k);
+            return 0;
+        }
+        catch (...){
+            return -1;
+        }
     }
 
 }
@@ -144,10 +140,6 @@ int main(int argc, char* argv[]) {
 
     Client myClient = Client(argv[1], stoi(argv[2]));
     if (!myClient.checkingIp()) {
-        cout << "invalid input";
-        exit(0);
-    }
-    if (!myClient.checkingPort()) {
         cout << "invalid input";
         exit(0);
     }
