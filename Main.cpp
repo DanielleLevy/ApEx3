@@ -18,7 +18,7 @@ int main(int argc, char *argv[]) {
     //vector<Sample> db = ReadFromFile(path);
     // A test that verifies that we are not looking for a number of neighbors K that
     // is greater than the number of samples that exist in the file:
-    if (k>ans.db.size()) { cout << "Arguments check failed, please try again"; exit(0); }
+    if (k>blabla.db.size()) { cout << "Arguments check failed, please try again"; exit(0); }
     string vectorFromUser;
     if (ans.db.empty()) {
         //Checks if the file is not empty:
