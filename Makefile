@@ -1,5 +1,16 @@
-a.out: Main.o Distance.o InputAndValidation.o Knn.o Sample.o
-	g++ -std=c++11 main.o Data.o KNN.o Calculator.o -o a.out
+all: server.out client.out
+
+server.out: Server.o Sample.o InputAndValidation.o Distance.o Knn.o
+	g++ -std=c++11 Server.o Sample.o InputAndValidation.o Distance.o Knn.o -o server.out
+
+client.out: Client.o Sample.o InputAndValidation.o Distance.o Knn.o
+	g++ -std=c++11 Client.o Sample.o InputAndValidation.o Distance.o Knn.o -o client.out
+
+Client.o:
+	g++ -std=c++11 -c Client.cpp Client.h
+
+Server.o:
+	g++ -std=c++11 -c Server.cpp Server.h
 
 Main.o:
 	g++ -std=c++11 -c Main.cpp Header.h Knn.h

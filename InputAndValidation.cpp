@@ -6,7 +6,7 @@
 #include "Header.h"
 using namespace std;
 
-vector<Sample> ReadFromFile(string fileName){
+vector<Sample> readFromFile(string fileName){
     /**
      * The function receives the name of the file and reads from it.
      * The function returns a vector of examples where each is an instance of the classifier.
@@ -16,7 +16,7 @@ vector<Sample> ReadFromFile(string fileName){
     vector<double> detail; //A vector that will hold the numbers for each example.
     string line, word,label;
     int size, startSize,counter=0;
-    string nameFile="../"+fileName;
+    string nameFile=fileName;
     fstream file (nameFile, ios::in);
     if(file.is_open())
     {
@@ -45,7 +45,7 @@ vector<Sample> ReadFromFile(string fileName){
                 //Converts the vector from a string to double.
                 try{
                     //input check if its contains string
-                     double value=stod(row[i]);
+                    double value=stod(row[i]);
                     detail.push_back(value);
                 }
                 catch(...){
@@ -132,17 +132,6 @@ vector <double> CreateVector(string str, char seprate) {
         return 0;
     }
 
-void argumentsCheck(int k, string path, string distance) {
-
-
-    // Checking input on the tagged vector file, it must be one of the three given files.
-    // Otherwise, you will print an error message and exit the program:
-    if(path != "beans_Classified.csv" && path != "iris_classified.csv" && path != "wine_Classified.csv") {
-        cout << "Arguments check failed, please try again"; exit(0); }
-
-    argumentsCheckClient(distance, k);
-
-}
 
 void argumentsCheckClient (string distance, int k){
 

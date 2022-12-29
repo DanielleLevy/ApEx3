@@ -3,8 +3,8 @@
 //
 
 #include "Client.h"
-#include "Header.h"
-#include "Knn.h"
+
+
 
 
 Client::Client(char * ip, int port) {
@@ -108,6 +108,7 @@ int Client::initClient(){
 }
 
 int Client::CheckFromUser(string message){
+    string distance,k;
     if(message.size()==0){//check if the str empty
         cout<<"the message is empty"<<endl;
         return -1;
@@ -120,12 +121,10 @@ int Client::CheckFromUser(string message){
         for (int i=0;i<message.size();i++) {// Go through each character in the string
             if (isalpha(message[i])){
               messages[0] = messageFromUser;
-              messageFromUser.empty();
-              messageFromUser = messageFromUser +message[i] + message [i+1] + message[i+2];
-              messages[1] = messageFromUser;
-              messageFromUser.empty();
-              messageFromUser = messageFromUser + message [i+4];
-              messages [2] = messageFromUser;
+              distance = message[i] + message [i+1] + message[i+2];
+              messages[1] = distance;
+              k = message[i+4];
+              messages [2] = k;
               break;
             }
             else {

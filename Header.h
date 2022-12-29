@@ -19,10 +19,10 @@
 using namespace std;
 
 
-vector<Sample> ReadFromFile(string fileName);
+vector<Sample> readFromFile(string fileName);
 vector <double> CreateVector(string str, char seprate);
 int CheckInput(vector <double> vector1,int size);
 void printFun(double number);
-void argumentsCheck(int k, string path, string distance);
+bool pathCheck( string path);
 void argumentsCheckClient (string distance, int k);
 int main(int argc, char *argv[]);

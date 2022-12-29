@@ -7,7 +7,7 @@
 
 Server::Server(int port, string file) {
     server_port=port;
-    db= ReadFromFile(file);
+    db= readFromFile(file);
     sockFD=socket(AF_INET, SOCK_STREAM, 0);
 }
 int Server:: initServer(){
@@ -77,6 +77,7 @@ int Server::handleClientServer() {
 
 
 int Server::CheckFromClient(string message) {
+
     if(message.size()==0){//check if the str empty
         cout<<"the message is empty"<<endl;
         return -1;
@@ -88,17 +89,29 @@ int Server::CheckFromClient(string message) {
         string messageFromUser="";
         int index=0;
         for (int i=0;i<message.size();i++) {// Go through each character in the string
-            if (message[i] != ',') {
-                messageFromUser = messageFromUser + message[i];
-            } else {
-                messages[index] = messageFromUser;
-                index++;
+            if (isalpha(message[i])){
+                messages[0] = messageFromUser;
                 messageFromUser.empty();
+                messageFromUser = messageFromUser +message[i] + message [i+1] + message[i+2];
+                messages[1] = messageFromUser;
+                messageFromUser.empty();
+                messageFromUser = messageFromUser + message [i+4];
+                messages [2] = messageFromUser;
+                break;
+            } else {
+                messageFromUser = messageFromUser + message[i];
+
             }
         }
         vectorToClass= CreateVector(messages[0],' ');
+        if(CheckInput(vectorToClass,db[0].vectorSize==-1)){
+            return -1;
+        }
         distanceM=messages[1];
         k= stod(messages[2]);
+        if(k>db.size()){
+            return -1;
+        }
         return 0;
     }
 
@@ -117,10 +130,10 @@ int main(int argc, char *argv[]){
     catch(...) {
         cout<<"invalid input"<<endl;
     }
-    if(port<=1024 || port>=65535){
+    if(port<1024 || port>65535){
         cout<<"invalid input"<<endl;
     }
-    Server myServer=Server(port,argv[2]);
+    Server myServer=Server(port,argv[1]);
     int initAns=myServer.initServer();
     if (initAns==0){
         while (true){
