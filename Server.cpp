@@ -60,8 +60,6 @@ int Server::handleClientServer() {
                 answer = CalcServer(vectorToClass, distanceM, k);
             } else if (answerCheck == -1) {
                 answer = "invalid input";
-            } else if (answerCheck == 1) {
-                break;
             }
             sent_bytes = send(client_sock, answer.c_str(), answer.length(), 0);
             if (sent_bytes < 0) {
@@ -82,10 +80,7 @@ int Server::CheckFromClient(string message) {
     if(message.size()==0){//check if the str empty
         cout<<"the message is empty"<<endl;
         return -1;
-    }
-    else if(message=="-1"){
-        return 1;
-    } else{
+    } else {
         for (int i=0;i<message.size();i++) {// Go through each character in the string
             if (isalpha(message[i])){
                 index=i;

@@ -86,6 +86,10 @@ int Client::initClient(){
             close (sockFD);
             break;
         }
+        else if (answerCheck == -1){
+            cout << "invalid input" << endl;
+            return -1;
+        }
 
         char buffer [4096];
 
