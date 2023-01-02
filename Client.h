@@ -28,6 +28,7 @@ public:
     bool checkingIp();
     bool checkingPort();
     int initClient();
+    int handleServerClient();
     Client(char * ip, int port);
 };
 

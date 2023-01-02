@@ -72,17 +72,15 @@ vector <double> CreateVector(string str, char seprate) {
          * output: vector full with numbers, if the input was ok*/
 
         vector<double> v;
+        vector<double> invalidVector;
         if(str.size()==0){//check if the str empty
-            cout<<"you should insert numbers only"<<endl;
-            exit(0);
+            return invalidVector;
         }
         string number;  //holds the number until the next seprate
         double numberAfterConv;    // wiil hold the number to insert to the vector
         for (int i=0;i<str.size();i++){     // Go through each character in the string
             if(isalpha(str[i]) ){           //Checks if the character is a letter
-                cout<<"you should insert numbers only"<<endl;
-                cout<<str[i];
-                exit(0);
+                return invalidVector;
             }
             if (str[i]!=seprate){       //Checks whether the character isn't the separator character (in this case a space)
                 number=number+str[i];   //If we haven't reached the separator character, it adds the character to the number
@@ -93,8 +91,7 @@ vector <double> CreateVector(string str, char seprate) {
                 }
                 catch(...){
                     //If the conversion was not successful, it was probably not a number: prints an error and exits the program
-                    cout<<"error. you should insert numbers only"<<endl;
-                    exit(0);
+                    return invalidVector;
                 }
                 v.push_back(numberAfterConv);   //If the conversion was successful, pushes the number into the vector
                 number.clear(); //If the conversion was successful, pushes the number into the vector
@@ -110,8 +107,7 @@ vector <double> CreateVector(string str, char seprate) {
                 numberAfterConv=stod(number);
             }
             catch(...){
-                cout<<"error. you should insert numbers only"<<endl;
-                exit(0);
+                return invalidVector;
             }
             v.push_back(numberAfterConv);
         }
@@ -121,28 +117,30 @@ vector <double> CreateVector(string str, char seprate) {
         //The function receives vector and the expected size of the vector
         if (vector1.size()!=size){
             //The vector is not the required size
-            cout<<"you should insert a vector at size: " << size <<endl;
             return -1;
         }
         if (vector1.size()==0){
             //If the magnitude of one of the vectors is equal to 0
-            cout<<"vector size is 0, The vector must contain at least one number  "<<endl;
             return -1;
         }
         return 0;
     }
 
 
-void argumentsCheckClient (string distance, int k){
+int argumentsCheckClient (string distance, int k){
 
     // Checking input on the distance function type. It must be one of the five known functions.
     // Otherwise, you will print an error message and exit the program:
     if(distance != "AUC" && distance != "MAN" && distance != "CHB" && distance != "CAN" && distance != "MIN") {
-        cout << "Arguments check failed, please try again"; exit(0); }
+        return -1;
+    }
 
     // Checking input on K. K must be a positive integer,
     // otherwise you will print an error message and exit the program:
-    if(k < 1 ) { cout << "Arguments check failed, please try again"; exit(0); }
+    if(k < 1 ) {
+        return -1;
+    }
+    return 0;
 
 }
 

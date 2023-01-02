@@ -55,10 +55,46 @@ bool Client::checkingPort(){
     return true;
 }
 
+int Client::handleServerClient (){
+    string inputFromUser;
+    getline (cin, inputFromUser);
+    int answerCheck = CheckFromUser(inputFromUser);
+    if (answerCheck == 0) {
+        int sent_bytes = send (sockFD, inputFromUser.c_str(), inputFromUser.length(), 0);
+        if (sent_bytes < 0) {
+            cout << "error sending to server" << endl;
+            return -1;
+        }
+    } else if (answerCheck == 1) {
+        close (sockFD);
+        exit(0);
+    }
+    else if (answerCheck == -1){
+        cout << "invalid input" << endl;
+        return -1;
+    }
+
+    char buffer [4096];
+    int expected_data_len = sizeof(buffer);
+    bzero(buffer, expected_data_len);
+    int read_bytes = recv(sockFD, buffer, sizeof(buffer), 0);
+    if (read_bytes == 0) {
+        cout << "connection is closed" << endl;
+        return 0;
+    }
+    else if (read_bytes < 0) {
+        cout<<"error receiving message" << endl;
+        return -1;
+    }
+    else{
+        cout << buffer << endl;
+    }
+
+return 0;
+}
+
 int Client::initClient(){
-    while (true) {
-        string inputFromUser;
-        getline (cin, inputFromUser);
+
         if (sockFD < 0){
             cout<<"error creating socket"<<endl;
             return -1;
@@ -74,45 +110,13 @@ int Client::initClient(){
             cout<<"error connecting to server"<< endl;
             return -1;
         }
+return 0;
 
-        int answerCheck = CheckFromUser(inputFromUser);
-        if (answerCheck == 0) {
-            int sent_bytes = send (sockFD, inputFromUser.c_str(), inputFromUser.length(), 0);
-            if (sent_bytes < 0) {
-                cout << "error sending to server" << endl;
-                return -1;
-            }
-        } else if (answerCheck == 1) {
-            close (sockFD);
-            break;
-        }
-        else if (answerCheck == -1){
-            cout << "invalid input" << endl;
-            return -1;
-        }
-
-        char buffer [4096];
-
-        int read_bytes = recv(sockFD, buffer, sizeof(buffer), 0);
-        if (read_bytes == 0) {
-            cout << "connection is closed" << endl;
-            break;
-        }
-        else if (read_bytes < 0) {
-            cout<<"error receiving message" << endl;
-            return -1;
-        }
-        else{
-            cout << buffer << endl;
-        }
-    }
-    return 0;
 }
 
 int Client::CheckFromUser(string message){
-    int index;
+    int index=-1;
     if(message.size()==0){//check if the str empty
-        cout<<"the message is empty"<<endl;
         return -1;
     }
     else if(message=="-1"){
@@ -124,13 +128,24 @@ int Client::CheckFromUser(string message){
                 break;
             }
         }
+        if(index==-1){
+            return -1;
+        }
         string vectorTemp=message.substr(0,index);
+        if(index+4>message.size()-1){
+            return -1;
+        }
         string distanceT= message.substr(index,3);
         string kTemp=message.substr(index+4,message.size()-vectorTemp.size()-distanceT.size());
         vector<double> a = CreateVector(vectorTemp, ' ');
+        if(a.empty()){
+            return -1;
+        }
         try {
             int k = stoi(kTemp);
-            argumentsCheckClient(distanceT,k);
+            if(argumentsCheckClient(distanceT,k)==-1){
+                return -1;
+            }
             return 0;
         }
         catch (...){
@@ -147,10 +162,17 @@ int main(int argc, char* argv[]) {
         cout << "invalid input";
         exit(0);
     }
-    while (true){
-        int talkWServer=myClient.initClient();
-        if(talkWServer<0){
-            continue;
+    if (!myClient.checkingPort()) {
+        cout << "invalid input";
+        exit(0);
+    }
+    int initClient =  myClient.initClient();
+    if (initClient ==0) {
+        while (true) {
+            int talkWServer = myClient.handleServerClient();
+            if (talkWServer < 0) {
+                continue;
+            }
         }
     }
 }

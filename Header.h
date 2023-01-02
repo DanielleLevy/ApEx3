@@ -24,5 +24,5 @@ vector <double> CreateVector(string str, char seprate);
 int CheckInput(vector <double> vector1,int size);
 void printFun(double number);
 bool pathCheck( string path);
-void argumentsCheckClient (string distance, int k);
+int argumentsCheckClient (string distance, int k);
 int main(int argc, char *argv[]);

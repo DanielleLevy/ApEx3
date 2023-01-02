@@ -8,6 +8,11 @@
 Server::Server(int port, string file) {
     server_port=port;
     db= readFromFile(file);
+    if (db.empty()) {
+        //Checks if the file is not empty:
+        cout << "invalid input" << endl;
+        exit(0);
+    }
     sockFD=socket(AF_INET, SOCK_STREAM, 0);
 }
 int Server:: initServer(){
@@ -76,9 +81,8 @@ int Server::handleClientServer() {
 
 int Server::CheckFromClient(string message) {
 
-    int index;
+    int index=-1;
     if(message.size()==0){//check if the str empty
-        cout<<"the message is empty"<<endl;
         return -1;
     } else {
         for (int i=0;i<message.size();i++) {// Go through each character in the string
@@ -87,10 +91,19 @@ int Server::CheckFromClient(string message) {
                 break;
             }
         }
+        if(index==-1){
+            return -1;
+        }
+        if(index+4>message.size()-1){
+            return -1;
+        }
         string vectorTemp=message.substr(0,index);
         distanceM= message.substr(index,3);
         string kTemp=message.substr(index+4,message.size()-vectorTemp.size()-distanceM.size());
         vectorToClass = CreateVector(vectorTemp, ' ');
+        if(vectorToClass.empty()){
+            return -1;
+        }
         try {
             k = stoi(kTemp);
         }
@@ -98,6 +111,9 @@ int Server::CheckFromClient(string message) {
             return -1;
         }
         if(k>db.size()){
+            return -1;
+        }
+        if(CheckInput(vectorToClass,db[0].vectorSize)<0){
             return -1;
         }
         return 0;
