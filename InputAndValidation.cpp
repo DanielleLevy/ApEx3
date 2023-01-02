@@ -72,7 +72,7 @@ vector <double> CreateVector(string str, char seprate) {
          * output: vector full with numbers, if the input was ok*/
 
         vector<double> v;
-        vector<double> invalidVector;
+        vector<double> invalidVector;// if the input invalid, return an empty vector.
         if(str.size()==0){//check if the str empty
             return invalidVector;
         }
