@@ -50,7 +50,7 @@ int Server::handleClientServer() {/*
  *The function listens to the client, receives the input and checks it and finally returns an answer to the client.
  * The function returns 0 if the process was successful and 1 otherwise.
  */
-    int sent_bytes;
+    int sentBytes;
     if (listen(sockFD, 0) < 0) {
         //If the listen function returns a value less than 0, it indicates an error and the function prints an error message and returns -1.
         cout << "error listening to a socket" << endl;
@@ -58,50 +58,50 @@ int Server::handleClientServer() {/*
     }
     struct sockaddr_in client_sin;
     unsigned int addr_len = sizeof(client_sin);
-    int client_sock = accept(sockFD, (struct sockaddr *) &client_sin, &addr_len);
-    if (client_sock < 0) {
+    int clientSock = accept(sockFD, (struct sockaddr *) &client_sin, &addr_len);
+    if (clientSock < 0) {
         // If the accept function returns a value less than 0, it indicates an error and the function prints an error message and returns -1.
         cout << "error accepting client" << endl;
         return -1;
     }
     char buffer[4096];
-    int expected_data_len = sizeof(buffer);
+    int expectedDataLen = sizeof(buffer);
     while (true) {
-        bzero(buffer, expected_data_len); //empty the buffer/
-        int read_bytes = recv(client_sock, buffer, expected_data_len, 0);
-        if (read_bytes == 0) {
+        bzero(buffer, expectedDataLen); //empty the buffer/
+        int readBytes = recv(client_sock, buffer, expectedDataLen, 0);
+        if (readBytes == 0) {
             //If the recv function returns 0, it indicates that the connection has been closed and the loop is broken.
             cout << "connection is closed" << endl;
             break;
-        } else if (read_bytes < 0){
+        } else if (readBytes < 0){
             // If the recv function returns a value less than 0, it indicates an error and the function prints an error message and returns -1.
             cout << "error receive" << endl;
             return -1;
         } else {
             //If the recv function returns a value greater than 0, indicating that data has been received, the function calls a function named CheckFromClient on buffer
-            int answerCheck = CheckFromClient(buffer);
+            int answerCheck = checkFromClient(buffer);
             if (answerCheck == 0) {
                 //The input is correct and saved by the members of the class.
-                answer = CalcServer(vectorToClass, distanceM, k);
+                answer = calcServer(vectorToClass, distanceM, k);
             } else if (answerCheck == -1) {
                 //invalid input.
                 answer = "invalid input";
             }
-            sent_bytes = send(client_sock, answer.c_str(), answer.length(), 0);
-            if (sent_bytes < 0) {
+            sentBytes = send(client_sock, answer.c_str(), answer.length(), 0);
+            if (sentBytes < 0) {
                 //if send to the client failed.
                 cout << "error sending to client" << endl;
                 return -1;
             }
         }
     }
-    close(client_sock);
+    close(clientSock);
     return 0; // all goes well.
 }
 
 
 
-int Server::CheckFromClient(string message) {/*
+int Server::checkFromClient(string message) {/*
  * The function receives the message from the user and checks it.
  * If the input is correct, it returns 0 and keeps the vector, K and the distance function in the class members.
  * If the cell is incorrect, it returns -1.
@@ -131,7 +131,7 @@ int Server::CheckFromClient(string message) {/*
         distanceM= message.substr(index,3);
         string kTemp=message.substr(index+4,message.size()-vectorTemp.size()-distanceM.size());
         //Sending the vector cycle to a function that returns the vector in a vector variable:
-        vectorToClass = CreateVector(vectorTemp, ' ');
+        vectorToClass = createVector(vectorTemp, ' ');
         if(vectorToClass.empty()){
             //If the vector is empty, it means that the input is incorrect
             return -1;
@@ -148,7 +148,7 @@ int Server::CheckFromClient(string message) {/*
             //If k is greater than the number of samples it is impossible to do the division and therefore the input is incorrect
             return -1;
         }
-        if(CheckInput(vectorToClass,db[0].vectorSize)<0){
+        if(checkInput(vectorToClass,db[0].vectorSize)<0){
             //Checks whether the vector is the same size as the vectors in the database.
             return -1;
         }
@@ -157,7 +157,7 @@ int Server::CheckFromClient(string message) {/*
 
 }
 
-string Server::CalcServer(vector<double> vectorfromuser, string distance, int k) {
+string Server::calcServer(vector<double> vectorfromuser, string distance, int k) {
     //The function receives a valid input, creates an instance of KNN and returns the label
     Knn answer(db, distance, k, vectorfromuser);
     return  answer.findTheLabel();
