@@ -23,7 +23,7 @@ protected:
     char * serverIp;
     int clientPort;
     int sockFD;
-    int CheckFromUser(string message);
+    int checkFromUser(string message);
 public:
     bool checkingIp();
     bool checkingPort();
