@@ -58,10 +58,10 @@ bool Client::checkingPort(){
 int Client::handleServerClient (){
     string inputFromUser;
     getline (cin, inputFromUser);
-    int answerCheck = CheckFromUser(inputFromUser);
+    int answerCheck = checkFromUser(inputFromUser);
     if (answerCheck == 0) {
-        int sent_bytes = send (sockFD, inputFromUser.c_str(), inputFromUser.length(), 0);
-        if (sent_bytes < 0) {
+        int sentBytes = send (sockFD, inputFromUser.c_str(), inputFromUser.length(), 0);
+        if (sentBytes < 0) {
             cout << "error sending to server" << endl;
             return -1;
         }
@@ -75,14 +75,14 @@ int Client::handleServerClient (){
     }
 
     char buffer [4096];
-    int expected_data_len = sizeof(buffer);
-    bzero(buffer, expected_data_len);
-    int read_bytes = recv(sockFD, buffer, sizeof(buffer), 0);
-    if (read_bytes == 0) {
+    int expectedDatalen = sizeof(buffer);
+    bzero(buffer, expectedDatalen);
+    int readBytes = recv(sockFD, buffer, sizeof(buffer), 0);
+    if (readBytes == 0) {
         cout << "connection is closed" << endl;
         return 0;
     }
-    else if (read_bytes < 0) {
+    else if (readBytes < 0) {
         cout<<"error receiving message" << endl;
         return -1;
     }
@@ -114,7 +114,7 @@ return 0;
 
 }
 
-int Client::CheckFromUser(string message){
+int Client::checkFromUser(string message){
     int index=-1;
     if(message.size()==0){//check if the str empty
         return -1;
@@ -137,7 +137,7 @@ int Client::CheckFromUser(string message){
         }
         string distanceT= message.substr(index,3);
         string kTemp=message.substr(index+4,message.size()-vectorTemp.size()-distanceT.size());
-        vector<double> a = CreateVector(vectorTemp, ' ');
+        vector<double> a = createVector(vectorTemp, ' ');
         if(a.empty()){
             return -1;
         }
