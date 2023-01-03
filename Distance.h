@@ -17,7 +17,7 @@ public:
  */
     string choice;
     Distance (string choiceFromTheUser);
-    double Calc(vector <double> a,  vector <double> b);
+    double calc(vector <double> a,  vector <double> b);
 private:
     double canberraD(vector <double> a,  vector <double> b );
     double chebyshec (vector <double> a, vector <double> b );
