@@ -65,7 +65,7 @@ vector<Sample> readFromFile(string fileName){
         cout<<"Could not open the file\n";
     return db;
 }
-vector <double> CreateVector(string str, char seprate) {
+vector <double> createVector(string str, char seprate) {
         /*this function get create a vector from the input
          * input: str- the line that the user put
          *        seprate- A character that tells us how the numbers are separated
@@ -113,7 +113,7 @@ vector <double> CreateVector(string str, char seprate) {
         }
         return v;   //Returning the vector
     }
-    int CheckInput(vector <double> vector1,int size){
+    int checkInput(vector <double> vector1,int size){
         //The function receives vector and the expected size of the vector
         if (vector1.size()!=size){
             //The vector is not the required size
