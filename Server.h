@@ -25,8 +25,8 @@ protected:
     int k;
     string distanceM;
     vector<double> vectorToClass;
-    string CalcServer(vector<double> vectorfromuser, string distance, int k);
-    int CheckFromClient(string message);
+    string calcServer(vector<double> vectorfromuser, string distance, int k);
+    int checkFromClient(string message);
 
 
 
