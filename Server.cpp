@@ -68,7 +68,7 @@ int Server::handleClientServer() {/*
     int expectedDataLen = sizeof(buffer);
     while (true) {
         bzero(buffer, expectedDataLen); //empty the buffer/
-        int readBytes = recv(client_sock, buffer, expectedDataLen, 0);
+        int readBytes = recv(clientSock, buffer, expectedDataLen, 0);
         if (readBytes == 0) {
             //If the recv function returns 0, it indicates that the connection has been closed and the loop is broken.
             cout << "connection is closed" << endl;
@@ -87,7 +87,7 @@ int Server::handleClientServer() {/*
                 //invalid input.
                 answer = "invalid input";
             }
-            sentBytes = send(client_sock, answer.c_str(), answer.length(), 0);
+            sentBytes = send(clientSock, answer.c_str(), answer.length(), 0);
             if (sentBytes < 0) {
                 //if send to the client failed.
                 cout << "error sending to client" << endl;
