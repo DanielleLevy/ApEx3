@@ -18,7 +18,7 @@ Distance::Distance( string choiceFromTheUser){/**
     }
 
 
-double Distance::Calc(vector <double> a,  vector <double> b){/**
+double Distance::calc(vector <double> a,  vector <double> b){/**
  * A calculator function, receiving 2 vectors for calculation and according to the user's choice, sends the vectors to the various functions and returns the answer.
  */
         if (choice=="AUC"){
